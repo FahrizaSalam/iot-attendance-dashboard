@@ -14,11 +14,12 @@ import {
   AlertCircle
 } from "lucide-react";
 
-const MQTT_SERVER = "wss://broker.hivemq.com:8884/mqtt";
-const DEVICE_ID = "absensi-01";
-const TOPIC_SCAN = "kampus/absensi/absensi-01/scan";
-const TOPIC_RESPONSE = "kampus/absensi/absensi-01/response";
-const TOPIC_STATUS = "kampus/absensi/absensi-01/status";
+const MQTT_SERVER = process.env.NEXT_PUBLIC_MQTT_SERVER || "wss://broker.hivemq.com:8884/mqtt";
+const MQTT_BASE_TOPIC = process.env.NEXT_PUBLIC_MQTT_BASE_TOPIC || "kampus/absensi/absensi-01";
+
+const TOPIC_SCAN = `${MQTT_BASE_TOPIC}/scan`;
+const TOPIC_RESPONSE = `${MQTT_BASE_TOPIC}/response`;
+const TOPIC_STATUS = `${MQTT_BASE_TOPIC}/status`;
 
 interface ScanData {
   device_id: string;
@@ -70,7 +71,7 @@ export default function Dashboard() {
           setCurrentScan(data);
           setStudentName("");
         } catch (e) {
-          console.error("Invalid scan data");
+          console.error("Invalid scan data", e);
         }
       }
     });
